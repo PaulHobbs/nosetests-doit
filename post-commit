@@ -1,0 +1,17 @@
+#!/bin/sh
+#
+# An example hook script that is called after a successful
+# commit is made.
+#
+# To enable this hook, rename this file to "post-commit".
+
+cd $GIT_DIR
+if [ -f dodo.py ]
+then
+    if [ ! -d rebase-merge ]
+    then
+        doit -n 7 --continue --verbosity=0 & # &> /dev/null &
+    fi
+else
+    echo Skipping doit.
+fi
