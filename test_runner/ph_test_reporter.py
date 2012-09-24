@@ -3,7 +3,7 @@ import sys
 
 def nose(directory, *args):
   args = args or [""]
-  print args
+  print directory, args
   return 'nosetests -w {0} {1}'.format(directory, *args)
 
 def notify(success, message):
@@ -17,9 +17,11 @@ def notify(success, message):
   print >>sys.stderr, 'message:', message
 
 
-  return "notify-send -i '{icon}' '{summary}' '{message}'".format(icon=icon,
-                                                                  summary=summary,
-                                                                  message=message)
+  return "notify-send -i '{icon}' -t 10000 '{summary}' '{message}'".format(
+    icon=icon,
+    summary=summary,
+    message=message)[:1000]  # avoid "Argument list too long."
+
 def notify_run(cmd):
   """
   Run a command and notify with result.

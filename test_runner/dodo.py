@@ -1,8 +1,8 @@
 from doit.tools import check_timestamp_unchanged
-from ph_test_reporter import nose, notify_run
+from test_runner.ph_test_reporter import nose, notify_run
 import os
 
-MINT_LIB = os.path.expanduser("~/lnkd/lib/mint/src/linkedin/mint")
+MINT_LIB = os.path.expanduser("~/lnkd/lib/mint")
 MINT_INTEG = os.path.expanduser("~/lnkd/apps/mint/integTest")
 
 
@@ -23,7 +23,7 @@ def task_mint_integration():
     'test_mint.py': MINT_LIB,
     'test_mint_build.py': MINT_LIB,
     'test_integration.py': MINT_LIB,
-    'test_checkout_and_update.py': MINT_LIB + '/main.py'
+    'test_checkout_and_update.py': MINT_LIB + '/src/linkedin/mint/main.py'
     }
 
   for fname, dep in INTEG_ASSOCS.iteritems():
