@@ -16,11 +16,12 @@ def notify(success, message):
 
   print >>sys.stderr, 'message:', message
 
+  message = message[:400]  # avoid "Argument list too long."
 
-  return "notify-send -i '{icon}' -t 10000 '{summary}' '{message}'".format(
+  return "notify-send -i '{icon}' -t 20000 '{summary}' '{message}'".format(
     icon=icon,
     summary=summary,
-    message=message)[:100]  # avoid "Argument list too long."
+    message=message)
 
 def notify_run(cmd):
   """
@@ -29,6 +30,9 @@ def notify_run(cmd):
 
   def go_():
     _, err_output, err = external(cmd)
-    external(notify(err == 0, err_output))
+    notify_cmd = notify(err == 0, err_output)
+    if DEBUG:
+      print notify_cmd
+    external(notify_cmd)
 
   return go_

@@ -8,9 +8,11 @@
 cd $GIT_DIR
 if [ -f dodo.py ]
 then
+    echo Dodo file present.
     if [ ! -d rebase-merge ]
     then
-        doit -n 7 --continue --verbosity=0 & # &> /dev/null &
+        echo Running doit:
+        doit -n 7 --continue --verbosity=0 &> doit.log &
     fi
 else
     echo Skipping doit.
