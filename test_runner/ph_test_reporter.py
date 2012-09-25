@@ -20,7 +20,7 @@ def notify(success, message):
   return "notify-send -i '{icon}' -t 10000 '{summary}' '{message}'".format(
     icon=icon,
     summary=summary,
-    message=message)[:1000]  # avoid "Argument list too long."
+    message=message)[:100]  # avoid "Argument list too long."
 
 def notify_run(cmd):
   """
