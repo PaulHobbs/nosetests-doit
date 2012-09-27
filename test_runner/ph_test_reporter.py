@@ -1,5 +1,6 @@
 from linkedin.command import external
 import sys
+import re
 
 DEBUG = True
 
@@ -19,7 +20,9 @@ def notify(success, message):
   # filter out stupid warnings.
 
   lines = message.splitlines()
-  message = "\n".join([line for line in lines if 'Warning' not in line])
+  ignore_regex = re.compile(r'(.*[wW]arning.*)\|(.*gevent.*)\|(.*-------.*)\|^$\|^OK$')
+  ignores = lambda line: re.match(ignore_regex, line)
+  message = "\n".join([line for line in lines if not ignores(line)])
 
   print >>sys.stderr, 'message:', message
 
