@@ -16,15 +16,14 @@ def task_mint_unit_tests():
                  check_timestamp_unchanged(MINT_LIB_TESTS)],
     }
 
-'''
 def task_mint_integration():
   """
   Runs the {fname} integration tests.
   """
+
+  # DON'T PUT test_integration IN HERE!!!  It will break the catalog!!
   INTEG_ASSOCS = {
     'test_mint.py': MINT_LIB_SRC,
-    'test_mint_build.py': MINT_LIB_SRC,
-    'test_integration.py': MINT_LIB_SRC,
     'test_checkout_and_update.py': MINT_LIB_SRC + '/main.py'
     }
 
@@ -41,4 +40,3 @@ def task_mint_integration():
       'actions': [notify_run(nose(MINT_INTEG, fname))],
       'uptodate': map(check_timestamp_unchanged, deps),
       }
-'''

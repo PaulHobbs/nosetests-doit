@@ -1,6 +1,8 @@
 from linkedin.command import external
 import sys
 
+DEBUG = True
+
 def nose(directory, *args):
   args = args or [""]
   print directory, args
@@ -13,6 +15,11 @@ def notify(success, message):
 
   summary = "Tests pass!" if success else "Tests failed."
   icon = '/usr/share/pixmaps/apple-%s.png' % ('green' if success else 'red')
+
+  # filter out stupid warnings.
+
+  lines = message.splitlines()
+  message = "\n".join([line for line in lines if 'Warning' not in line])
 
   print >>sys.stderr, 'message:', message
 
@@ -33,6 +40,8 @@ def notify_run(cmd):
     notify_cmd = notify(err == 0, err_output)
     if DEBUG:
       print notify_cmd
-    external(notify_cmd)
+    _, _, err = external(notify_cmd)
+    if DEBUG:
+      print "Notify command returned: ", err
 
   return go_
