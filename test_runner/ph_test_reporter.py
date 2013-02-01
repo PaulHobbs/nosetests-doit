@@ -20,7 +20,7 @@ def notify(success, message):
   # filter out stupid warnings.
 
   lines = message.splitlines()
-  ignore_regex = re.compile(r'(.*[wW]arning.*)\|(.*gevent.*)\|(.*-------.*)\|^$\|^OK$')
+  ignore_regex = re.compile(r'(.*[wW]arning.*)|(.*gevent.*)|(.*[-.]{10}.*)|^$|^OK$')
   ignores = lambda line: re.match(ignore_regex, line)
   message = "\n".join([line for line in lines if not ignores(line)])
 

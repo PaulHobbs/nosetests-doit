@@ -13,7 +13,7 @@ then
     then
         echo Running doit:
         source ~/.virtualenvs/linkedin/bin/activate
-        doit -n 7 --continue --verbosity=0 &> doit.log &
+        # nohup doit -n 7 --continue --verbosity=0 &> doit.log &
     fi
 else
     echo Skipping doit.
