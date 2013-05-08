@@ -12,12 +12,13 @@ def nose(directory, *args):
   return 'nosetests -w {0} {1}'.format(directory, *args)
 
 
-def notify(success, message, duration):
+def notify(success, message, duration, module=None):
   """
   Notify whether tests succeeded, and give the test output.
   """
 
-  summary = "Tests passed." if success else "Tests failed!"
+  summary = "%s tests" % module if module else "Tests"
+  summary += " passed." if success else " failed!"
   icon = '/usr/share/pixmaps/apple-%s.png' % ('green' if success else 'red')
 
   print >>sys.stderr, 'message:', message
@@ -40,13 +41,13 @@ def notify(success, message, duration):
     message=message)
 
 
-def notify_run(cmd, duration=10000):
+def notify_run(cmd, *args, **kwargs):
   """
   Run a command and notify with result.
   """
 
   _, err_output, err = external(cmd)
-  notify_cmd = notify(err == 0, err_output, duration=duration)
+  notify_cmd = notify(err == 0, err_output, *args, **kwargs)
   if DEBUG:
     print notify_cmd
   _, _, err = external(notify_cmd)

@@ -29,10 +29,10 @@ def make_test_tsk(root, module_name):
                      for pattern in PATTERNS
                      for subdir in ['/', '/*/'])
 
-  def tsk():
-    print file_deps
+  def tsk(root=root, file_deps=file_deps):
     return {
-      'actions': [lambda: notify_run(nose(root + '/test'))],
+      'actions': [lambda: notify_run(nose(root + '/test'),
+                                     module=module_name)],
       'file_dep': file_deps,
       'uptodate': map(check_timestamp_unchanged, file_deps),
     }
