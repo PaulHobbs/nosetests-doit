@@ -38,13 +38,10 @@ def notify_run(cmd):
   Run a command and notify with result.
   """
 
-  def go_():
-    _, err_output, err = external(cmd)
-    notify_cmd = notify(err == 0, err_output)
-    if DEBUG:
-      print notify_cmd
-    _, _, err = external(notify_cmd)
-    if DEBUG:
-      print "Notify command returned: ", err
-
-  return go_
+  _, err_output, err = external(cmd)
+  notify_cmd = notify(err == 0, err_output)
+  if DEBUG:
+    print notify_cmd
+  _, _, err = external(notify_cmd)
+  if DEBUG:
+    print "Notify command returned: ", err
