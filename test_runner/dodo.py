@@ -9,6 +9,12 @@ TESTS = (("~/lnkd/lib/mint", 'linkedin/mint'),
 
 PATTERNS = ("*.py", "*.html")
 
+EXCLUDE = ("_flymake",)
+
+
+def include(s):
+  return not any(e in s for e in EXCLUDE)
+
 
 def concat(seqs):
   return tuple(itertools.chain.from_iterable(seqs))
@@ -17,21 +23,22 @@ def concat(seqs):
 def make_test_tsk(root, module_name):
   root = os.path.expanduser(root)
 
-  file_deps = concat(glob.glob(d + subdir + pattern)
+  file_deps = concat(filter(include, glob.glob(d + subdir + pattern))
                      for d in (root + '/test',
                                root + '/src/%s' % module)
                      for pattern in PATTERNS
                      for subdir in ['/', '/*/'])
 
-  def task():
+  def tsk():
+    print file_deps
     return {
       'actions': [lambda: notify_run(nose(root + '/test'))],
       'file_dep': file_deps,
       'uptodate': map(check_timestamp_unchanged, file_deps),
     }
 
-  task.__name__ = "task_run_tests_for_%s" % module
-  return task
+  tsk.__name__ = "task_run_tests_for_%s" % module
+  return tsk
 
 
 for root, module in TESTS:
