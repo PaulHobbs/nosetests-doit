@@ -1,20 +1,28 @@
 from doit.tools import check_timestamp_unchanged
 from test_runner.ph_test_reporter import nose, notify_run
+import glob
+import itertools
 import os
-from functools import partial
 
 TESTS = (("~/lnkd/lib/mint", 'linkedin/mint'),
          ("~/lnkd/apps/push-my-upgrade-server", 'pushmyupgradeserver'))
 
 
+def concat(seqs):
+  return tuple(itertools.chain.from_iterable(seqs))
+
+
 def make_test_tsk(root, module_name):
   root = os.path.expanduser(root)
 
+  file_deps = concat(glob.glob(d + "/*.py")
+                     for d in (root + '/test', root + '/src/%s' % module))
+
   def task():
     return {
-    'actions': [lambda: notify_run(nose(root + '/test'))],
-    'uptodate': [check_timestamp_unchanged(root + '/test'),
-                 check_timestamp_unchanged(root + '/src/%s' % module)],
+      'actions': [lambda: notify_run(nose(root + '/test'))],
+      'file_dep': file_deps,
+      'uptodate': map(check_timestamp_unchanged, file_deps),
     }
 
   task.__name__ = "task_run_tests_for_%s" % module

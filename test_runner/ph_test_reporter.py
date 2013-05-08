@@ -22,7 +22,15 @@ def notify(success, message):
   lines = message.splitlines()
   ignore_regex = re.compile(r'(.*[wW]arning.*)|(.*gevent.*)|(.*[-.]{10}.*)|^$|^OK$')
   ignores = lambda line: re.match(ignore_regex, line)
+
+  if not success:
+    keywords = ['fail', 'error']
+    lines = [line for line in lines
+             if any(k in line.lower() for k in keywords)]
+
   message = "\n".join([line for line in lines if not ignores(line)])
+
+
 
   print >>sys.stderr, 'message:', message
 
