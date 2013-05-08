@@ -29,7 +29,7 @@ def make_test_tsk(root, module_name):
                      for pattern in PATTERNS
                      for subdir in ['/', '/*/'])
 
-  def tsk(root=root, file_deps=file_deps):
+  def tsk():
     return {
       'actions': [lambda: notify_run(nose(root + '/test'),
                                      module=module_name)],

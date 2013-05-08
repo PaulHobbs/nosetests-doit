@@ -12,7 +12,7 @@ def nose(directory, *args):
   return 'nosetests -w {0} {1}'.format(directory, *args)
 
 
-def notify(success, message, duration, module=None):
+def notify(success, message, duration=10000, module=None):
   """
   Notify whether tests succeeded, and give the test output.
   """
