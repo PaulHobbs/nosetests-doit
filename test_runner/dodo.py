@@ -25,7 +25,7 @@ def make_test_tsk(root, module_name):
 
   file_deps = concat(filter(include, glob.glob(d + subdir + pattern))
                      for d in (root + '/test',
-                               root + '/src/%s' % module)
+                               root + '/src/%s' % module_name)
                      for pattern in PATTERNS
                      for subdir in ['/', '/*/'])
 
@@ -44,14 +44,14 @@ def make_test_tsk(root, module_name):
                                          test_file),
                                     func=base_file_name)])
 
-    tsk.__name__ = "task_%s__%s" % (module, base_file_name)
+    tsk.__name__ = "task_%s__%s" % (module_name, base_file_name)
     yield tsk
 
-  # Make a task to run all of the module's tests.
+  # Make a task to run all of the module_name's tests.
   def tsk():
     return dict(deps_dict,
                 actions=[lambda: notify_run(nose(root + '/test'),
-                                            func=module)])
+                                            func=module_name)])
 
   tsk.__name__ = "task_%s" % module
   yield tsk
