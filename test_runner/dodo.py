@@ -57,6 +57,11 @@ def make_test_tsk(root, module_name):
   yield tsk
 
 
-for root, module in TESTS:
-  for fn in make_test_tsk(root, module):
-    globals()[fn.__name__] = fn
+def make_tsks():
+  for root, module in TESTS:
+    for fn in make_test_tsk(root, module):
+      globals()[fn.__name__] = fn
+
+
+if __name__ == "__main__":
+  make_tsks()
