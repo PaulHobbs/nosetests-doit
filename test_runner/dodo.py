@@ -53,7 +53,7 @@ def make_test_tsk(root, module_name):
                 actions=[lambda: notify_run(nose(root + '/test'),
                                             func=module_name)])
 
-  tsk.__name__ = "task_%s" % module
+  tsk.__name__ = "task_%s" % module_name
   yield tsk
 
 
@@ -63,5 +63,4 @@ def make_tsks():
       globals()[fn.__name__] = fn
 
 
-if __name__ == "__main__":
-  make_tsks()
+make_tsks()
