@@ -37,10 +37,8 @@ def notify(success, message, duration=10000, func=None):
     lines = [line for line in lines
              if any(k in line.lower() for k in keywords)]
 
-  return "notify-send -i '{icon}' -t 10000 '{summary}' '{message}'".format(
-    icon=icon,
-    summary=summary,
-    message=message)
+  return "notify-send -i '{icon}' -t {duration} '{summary}' '{message}'".format(
+    **locals())
 
 
 def notify_run(cmd, *args, **kwargs):
