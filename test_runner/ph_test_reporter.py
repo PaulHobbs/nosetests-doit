@@ -23,17 +23,20 @@ def notify(success, message, duration=10000, func=None):
 
   print >>sys.stderr, 'message:', message
 
-  # filter out warnings and other noisy lines.
-  lines = message.splitlines()
-  keep = lambda line: not re.match(IGNORE_REGEX, line)
-  message = "\n".join(filter(keep, lines))
+  # We don't care about the message if the tests are passing.
+  if success:
+    message = ""
 
-  # Failures are usually too big:
-  if not success:
+  else:
+    # filter out warnings and other noisy lines.
+    lines = message.splitlines()
+    keep = lambda line: not re.match(IGNORE_REGEX, line)
+    message = "\n".join(filter(keep, lines))
+
+    # Failures are usually too big:
     keywords = ['fail', 'error', '----']
     lines = [line for line in lines
              if any(k in line.lower() for k in keywords)]
-
 
   return "notify-send -i '{icon}' -t 10000 '{summary}' '{message}'".format(
     icon=icon,
