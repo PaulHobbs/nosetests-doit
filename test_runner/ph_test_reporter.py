@@ -16,8 +16,7 @@ def notify(success, message, duration=10000, func=None):
   """
   Notify whether tests succeeded, and give the test output.
   """
-
-  summary = "%s tests" % func if func else "Tests"
+  summary = func or "Tests"
   summary += " passed." if success else " failed!"
   icon = '/usr/share/pixmaps/apple-%s.png' % ('green' if success else 'red')
 
