@@ -7,17 +7,17 @@ DEBUG = True
 IGNORE_REGEX = re.compile(r'(.*[wW]arning.*)|(.*import.*)')
 
 def nose(directory, *args):
-  args = args or [""]
+  args = args or ["-x"]
   print directory, args
   return 'nosetests -w {0} {1}'.format(directory, *args)
 
 
-def notify(success, message, duration=10000, module=None):
+def notify(success, message, duration=10000, func=None):
   """
   Notify whether tests succeeded, and give the test output.
   """
 
-  summary = "%s tests" % module if module else "Tests"
+  summary = "%s tests" % func if func else "Tests"
   summary += " passed." if success else " failed!"
   icon = '/usr/share/pixmaps/apple-%s.png' % ('green' if success else 'red')
 

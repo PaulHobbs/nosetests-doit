@@ -29,18 +29,34 @@ def make_test_tsk(root, module_name):
                      for pattern in PATTERNS
                      for subdir in ['/', '/*/'])
 
-  def tsk():
-    return {
-      'actions': [lambda: notify_run(nose(root + '/test'),
-                                     module=module_name)],
-      'file_dep': file_deps,
-      'uptodate': map(check_timestamp_unchanged, file_deps),
-    }
+  deps_dict = {
+    'file_dep': file_deps,
+    'uptodate': map(check_timestamp_unchanged, file_deps),
+  }
 
-  tsk.__name__ = "task_run_tests_for_%s" % module
-  return tsk
+  # Make a task for each test_file.
+  for test_file in glob.glob(root + '/test/*test*.py'):
+    base_file_name = os.path.basename(test_file)[:-len(".py")]
+
+    def tsk(test_file=test_file, base_file_name=base_file_name):
+      return dict(deps_dict,
+        actions=[lambda: notify_run(nose(root + '/test',
+                                         test_file),
+                                    func=base_file_name)])
+
+    tsk.__name__ = "task_%s__%s" % (module, base_file_name)
+    yield tsk
+
+  # Make a task to run all of the module's tests.
+  def tsk():
+    return dict(deps_dict,
+                actions=[lambda: notify_run(nose(root + '/test'),
+                                            func=module)])
+
+  tsk.__name__ = "task_%s" % module
+  yield tsk
 
 
 for root, module in TESTS:
-  fn = make_test_tsk(root, module)
-  globals()[fn.__name__] = fn
+  for fn in make_test_tsk(root, module):
+    globals()[fn.__name__] = fn
